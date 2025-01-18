@@ -63,9 +63,14 @@ public class BotController : MonoBehaviour
         {
             if (listAttackBehaviours[0] is IAttackBehavior behavior)
             {
-                IAttackBehavior attackBehavior = behavior;
-                attackBehavior.ExecuteAttack(this);
-                attackBehavior.ExecuteAttack(this);
+                if(behavior is ShootBallFrozenAttack shootBallFrozen)
+                {
+                    shootBallFrozen.Angle = 45;
+                    shootBallFrozen.ExecuteAttack(this);
+                    shootBallFrozen.Angle = 135;
+                    shootBallFrozen.ExecuteAttack(this);
+                }
+                
             }
         }
               
