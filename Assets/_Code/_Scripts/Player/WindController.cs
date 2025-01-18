@@ -1,33 +1,18 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class WindController : MonoBehaviour {
-    [SerializeField] private GameObject bubble; // Assign your soap ball's Rigidbody in the Inspector
-    [SerializeField] public float windForceMultiplier = 3f; // Adjust to control the wind force
+    [SerializeField] private List<GameObject> bubbles;
+    [SerializeField] private float windForceMultiplier;
+    [SerializeField] private float effectRadius;
 
     private Vector3 dragStartPos;
     private Vector3 dragEndPos;
-    private Vector3 dragVector;
     private bool isDragging;
-    private GameObject movementAllowedArea;
-
-    private void Awake()
-    {
-        dragVector = Vector3.zero;
-        movementAllowedArea = GameObject.FindGameObjectWithTag(GameConstants.PLAYING_AREA_TAG);
-        bubble = GameObject.FindGameObjectWithTag(GameConstants.PLAYER_TAG);
-    }
 
     void Update()
     {
         HandleMouseInput();
-    }
-
-    private void LateUpdate()
-    {
-        if (dragVector != Vector3.zero)
-        {
-            LimitMovementSpace();
-        }
     }
 
     private void HandleMouseInput()
@@ -35,46 +20,62 @@ public class WindController : MonoBehaviour {
         if (Input.GetMouseButtonDown(0))
         {
             // Record the starting position of the drag
-            dragStartPos = Input.mousePosition;
+            dragStartPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            dragStartPos.z = 0;
             isDragging = true;
         }
         else if (Input.GetMouseButtonUp(0) && isDragging)
         {
             // Record the ending position of the drag and calculate the direction
-            dragEndPos = Input.mousePosition;
-            dragVector = (dragEndPos - dragStartPos).normalized;
-            dragVector = new Vector3(dragVector.x, dragVector.y, 0);
+            dragEndPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            dragEndPos.z = 0;
+            Vector2 normalizedVector = (dragEndPos - dragStartPos).normalized;
 
-            // Apply wind force
-            ApplyWindForce(dragVector);
+            // Calculate ratio and adjust drag vector
+            Vector3 dragVector = new Vector3(normalizedVector.x, normalizedVector.y, 0);
+
+            foreach (var bubble in bubbles)
+            {
+                if (IsWithinEffectRadius(bubble.transform.position))
+                {
+
+                    ApplyWindForce(dragVector, bubble);
+                }
+            }
             isDragging = false;
         }
     }
-
-    private void ApplyWindForce(Vector3 dragVector)
+    private bool IsWithinEffectRadius(Vector3 bubblePosition)
     {
-        // Convert screen space drag vector to world space
-        Vector3 worldDirection = new Vector3(dragVector.x, 0, dragVector.y);
-
-        // Apply force to the soap ball
-        if (bubble.TryGetComponent(out Rigidbody2D bubbleRigid))
-        {
-            bubbleRigid.AddForce(worldDirection * windForceMultiplier, ForceMode2D.Impulse);
-        }
+        // Check if the bubble is within the effect radius
+        float distance = Vector3.Distance(bubblePosition, dragStartPos);
+        return distance <= effectRadius;
     }
 
-    private void LimitMovementSpace()
+    private void ApplyWindForce(Vector2 vector, GameObject obj)
     {
-        //Get dashing target width
-        Renderer bubbleRenderer = bubble.GetComponent<Renderer>();
-        float bubbleWidth = bubbleRenderer ? bubbleRenderer.bounds.size.x : 0;
-
-        bubble.transform.position = MovementUtilities.LimitPositionInsideArea(movementAllowedArea, bubble, bubble.transform.position);
+        Rigidbody2D bubbleRigid = obj.GetComponent<Rigidbody2D>();
+        if (bubbleRigid == null) return;
+        bubbleRigid.AddForce(vector * windForceMultiplier, ForceMode2D.Impulse);
     }
+    //private Vector2 AdjustVectorWithRatio(Vector2 dragVector, GameObject obj)
+    //{
+    //    // Calculate screen bounds in world space
+    //    float screenHeight = Camera.main.orthographicSize * 2f;
+    //    float screenWidth = screenHeight * Camera.main.aspect;
 
-    private float GetObjectWidth(GameObject obj)
-    {
-        Renderer objRenderer = obj.GetComponent<Renderer>();
-        return objRenderer ? objRenderer.bounds.size.x : 0;
-    }
+    //    // Calculate the object's current position
+    //    Vector2 objectPosition = obj.transform.position;
+
+    //    // Determine distance to left or right border based on drag direction
+    //    float distanceToBorder = dragVector.x > 0
+    //        ? objectPosition.x + (screenWidth / 2f) // Distance to left border
+    //        : (screenWidth / 2f) - objectPosition.x;  // Distance to right border
+
+    //    // Calculate the ratio of screen height to the distance
+    //    float ratio = screenWidth / distanceToBorder;
+
+    //    // Scale the drag vector using the ratio
+    //    return dragVector * ratio;
+    //}
 }
