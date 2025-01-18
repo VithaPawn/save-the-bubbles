@@ -1,13 +1,13 @@
 using UnityEngine;
-using static UnityEngine.RuleTile.TilingRuleOutput;
 
 public static class MovementUtilities {
     public static Vector3 LimitPositionInsideArea(GameObject area, GameObject obj, Vector3 pos)
     {
+        Renderer objRenderer = obj.GetComponent<Renderer>();
+        if (objRenderer == null) return obj.transform.position;
         Vector3 limitedPos = pos;
         Bounds areaBounds = GetObjectBounds(area);
         //Get object width/height
-        Renderer objRenderer = obj.GetComponent<Renderer>();
         float objWidth = objRenderer ? objRenderer.bounds.size.x : 0;
         float objHeight = objRenderer ? objRenderer.bounds.size.y : 0;
         //Limit position inside area
