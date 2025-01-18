@@ -86,11 +86,11 @@ public class BotController : MonoBehaviour
         Vector3 screenRight = mainCamera.WorldToScreenPoint(botRight);
 
         // Reverse direction when bot hits the screen edges
-        if (screenLeft.x <= 0 && !movingRight)
+        if (screenLeft.x <= 0 + 10 && !movingRight)
         {
             movingRight = true;
         }
-        else if (screenRight.x >= Screen.width && movingRight)
+        else if (screenRight.x >= Screen.width - 10 && movingRight)
         {
             movingRight = false;
         }

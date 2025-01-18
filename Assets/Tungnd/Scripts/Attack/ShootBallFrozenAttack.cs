@@ -32,7 +32,5 @@ public class ShootBallFrozenAttack : MonoBehaviour, IAttackBehavior
 
         // Áp dụng lực bắn
         rb.AddForce(direction * shootForce, ForceMode2D.Impulse);
-
-        Debug.Log($"Bot bắn bóng băng với góc {angle} độ và lực {shootForce}");
     }
 }
