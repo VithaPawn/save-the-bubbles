@@ -267,7 +267,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bubble: {fileID: 1080468209}
-  windForceMultiplier: 3
+  windForceMultiplier: 10
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
