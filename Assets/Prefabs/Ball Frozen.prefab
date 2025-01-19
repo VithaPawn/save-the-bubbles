@@ -95,7 +95,7 @@ CircleCollider2D:
   m_GameObject: {fileID: 3193588840048906803}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 7c036ba95ffec82439b1899ff7759a41, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -115,7 +115,7 @@ CircleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -160,3 +160,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f5a70c939dc642409df4e048316aa92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  freezeColor: {r: 0.24840862, g: 0.24840862, b: 0.94716984, a: 1}
+  freezeDuration: 2

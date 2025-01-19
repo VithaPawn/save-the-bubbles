@@ -1,11 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class ShootBallFrozenAttack : MonoBehaviour, IAttackBehavior
-{
+public class ShootBallFrozenAttack : MonoBehaviour, IAttackBehavior {
     [SerializeField] private GameObject ballFrozenPrefab; // Prefab quả bóng băng
-    [SerializeField] private float shootForce = 10f; // Lực bắn của bóng
+    [SerializeField] private float shootForce = 13f; // Lực bắn của bóng
     public bool IsManualSetAngle = false;
     public int Angle = 0;
     public void ExecuteAttack(BotController bot)
@@ -37,7 +34,7 @@ public class ShootBallFrozenAttack : MonoBehaviour, IAttackBehavior
         {
             angle = Angle;
         }
-        
+
         Vector2 direction = new Vector2(Mathf.Cos(angle * Mathf.Deg2Rad), Mathf.Sin(angle * Mathf.Deg2Rad));
 
         // Áp dụng lực bắn

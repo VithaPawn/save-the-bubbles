@@ -39,7 +39,7 @@ public class BubblesManager : MonoBehaviour {
         CreateBubbleWithVelocity(originalPosition - offset, newSize, originalVelocity + new Vector2(-1f, -0.5f));
 
         // Destroy the original bubble
-        DestroyBubbleFromList(bubble);
+        bubble.DestroyMyself();
     }
 
 
@@ -82,15 +82,21 @@ public class BubblesManager : MonoBehaviour {
         CreateBubbleWithVelocity(averagePosition, newSize, combinedVelocity);
 
         // Destroy the original bubbles
-        DestroyBubbleFromList(firstBubble);
-        DestroyBubbleFromList(secondBubble);
-    }
-
-    private void DestroyBubbleFromList(Bubble bubble)
-    {
-        bubbles.Remove(bubble);
-        bubble.DestroyMyself();
+        firstBubble.DestroyMyself();
+        secondBubble.DestroyMyself();
     }
 
     public List<Bubble> GetBubbleList() { return bubbles; }
+
+    public void RemoveBubble(Bubble bubble)
+    {
+        if (bubbles.Count > 0 && bubbles.Contains(bubble))
+        {
+            bubbles.Remove(bubble);
+        }
+        else
+        {
+            Debug.LogError("The target bubble is not in the bubble pool");
+        }
+    }
 }
